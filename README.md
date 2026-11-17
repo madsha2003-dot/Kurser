@@ -1,6 +1,6 @@
 # Kurser
 
-Offentlig kursside for watchlisten og udvalgte indeks: **https://madsha2003-dot.github.io/kurser/**
+Offentlig kursside for watchlisten og udvalgte indeks: **https://madsha2003-dot.github.io/Kurser/**
 
 - `hent.py` henter kurser fra Yahoo Finance (yfinance) og skriver `docs/data/*.json`.
 - `.github/workflows/kurser.yml` kører hvert 15. minut på hverdage (00–22 UTC).
