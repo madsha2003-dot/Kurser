@@ -1,0 +1,4 @@
+{
+  "watchlist": {"GOOGL": "Alphabet", "NVDA": "Nvidia", "GEV": "GE Vernova", "ENR.DE": "Siemens Energy", "6501.T": "Hitachi", "RKLB": "Rocket Lab", "SPCX": "SpaceX"},
+  "indeks": {"^GSPC": "S&P 500", "^STOXX": "STOXX 600", "^N225": "Nikkei 225", "1306.T": "TOPIX (ETF 1306.T)", "^OMXC25": "C25", "^VIX": "VIX"}
+}
