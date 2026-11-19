@@ -1,7 +1,7 @@
 name: Kurser
 on:
   schedule:
-    - cron: "*/15 0-21 * * 1-5"   # hvert 15. min. på hverdage fra Tokyos åbning til USA's lukning (UTC)
+    - cron: "7 0-21 * * 1-5"   # én gang i timen på hverdage (UTC); jobbet henter selv hvert 15. min. (GitHub kører */15 for sjældent)
   workflow_dispatch:
   push:
     branches: [main]
@@ -14,19 +14,23 @@ concurrency:
 jobs:
   hent:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 65
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12", cache: pip }
       - run: pip install -r requirements.txt
-      - run: python hent.py
-      - name: Gem
+      - name: Hent og gem hvert 15. min. i en time
         run: |
           git config user.name "kurser-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/data
-          git diff --cached --quiet && exit 0
-          git commit -q -m "Kurser $(date -u +%FT%H:%MZ)"
-          git pull -q --rebase -X theirs || true
-          git push -q
+          for i in 1 2 3 4; do
+            python hent.py || echo "hent fejlede (runde $i)"
+            git add docs/data
+            if ! git diff --cached --quiet; then
+              git commit -q -m "Kurser $(date -u +%FT%H:%MZ)"
+              git pull -q --rebase -X theirs || true
+              git push -q || echo "push fejlede (runde $i)"
+            fi
+            [ "$i" -lt 4 ] && [ "${{ github.event_name }}" = "schedule" ] && sleep 840 || break
+          done
